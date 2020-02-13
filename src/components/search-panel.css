@@ -1,0 +1,7 @@
+.search-panel {
+    width: auto;
+    flex-grow: 1;
+    margin-right: 10px;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 3px;
+}
