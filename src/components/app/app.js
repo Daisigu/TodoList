@@ -65,13 +65,32 @@ onToggleImportant = (id) => {
 
 onToggleDone = (id) =>  {
     this.setState(({todoData}) => {
+        const idx = todoData.findIndex((el) => el.id ===id);
 
+        const oldItem = todoData[idx];
+        const newItem = {...oldItem,
+                         done: !oldItem.done};
+
+         const newArray = [
+             ...todoData.slice(0,idx),
+             newItem,
+             ...todoData.slice(idx+1)
+         ];
+         
+    return {
+        todoData: newArray
+    };
     });
 };
 render(){
+
+    const doneCount = this.state.todoData.filter((el) => el.done).length;
+
+    const todoCount = this.state.todoData.length - doneCount;
+
     return (
         <div className="todo-app">
-            <AppHeader/>
+            <AppHeader toDo={todoCount} done={doneCount} />
             <div className="top-panel d-flex">
             <SearchPanel/> 
             <ItemStatusFilter/>
