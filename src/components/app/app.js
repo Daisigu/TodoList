@@ -58,35 +58,45 @@ this.setState( ( { todoData } ) => {
     };
 
 });
- };
+};
+
+toggleProperty(arr,id,propName){
+    const idx = arr.findIndex((el) => el.id ===id);
+
+    const oldItem = arr[idx];
+    const newItem = {...oldItem,
+                     [propName]: !oldItem[propName]};
+
+            return [
+         ...arr.slice(0,idx),
+         newItem,
+         ...arr.slice(idx+1)
+     ];
+     
+
+}
+
 onToggleImportant = (id) => {
-    console.log('ToggleImportant', id);
+    this.setState(({todoData}) => {   
+        return {
+            todoData: this.toggleProperty(todoData, id, 'important')
+        };
+        });
 };
 
 onToggleDone = (id) =>  {
-    this.setState(({todoData}) => {
-        const idx = todoData.findIndex((el) => el.id ===id);
-
-        const oldItem = todoData[idx];
-        const newItem = {...oldItem,
-                         done: !oldItem.done};
-
-         const newArray = [
-             ...todoData.slice(0,idx),
-             newItem,
-             ...todoData.slice(idx+1)
-         ];
-         
+    this.setState(({todoData}) => {   
     return {
-        todoData: newArray
+        todoData: this.toggleProperty(todoData, id, 'done')
     };
     });
 };
 render(){
 
-    const doneCount = this.state.todoData.filter((el) => el.done).length;
+    const {todoData} = this.state;
+    const doneCount = todoData.filter((el) => el.done).length;
 
-    const todoCount = this.state.todoData.length - doneCount;
+    const todoCount = todoData.length - doneCount;
 
     return (
         <div className="todo-app">
@@ -95,7 +105,7 @@ render(){
             <SearchPanel/> 
             <ItemStatusFilter/>
             </div>
-            <TodoList todos={this.state.todoData}
+            <TodoList todos={todoData}
                       onDeleted={this.deleteItem}
                       onToggleImportant={this.onToggleImportant}
                       onToggleDone={this.onToggleDone} /> 
